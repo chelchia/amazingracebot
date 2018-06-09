@@ -7,4 +7,4 @@ Required packages:
 
 Create a .env file and copy the contents of env.README
 
-Run main.py
+python main.py
