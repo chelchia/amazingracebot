@@ -4,7 +4,7 @@ import sqlite3
 class DBHelper:
     def __init__(self, dbname="todo.sqlite"):
         self.dbname = dbname
-        self.conn = sqlite3.connect(dbname)
+        self.conn = sqlite3.connect(dbname, check_same_thread=False)
 
     def setup(self):
         stmt = "CREATE TABLE IF NOT EXISTS items (description text)"

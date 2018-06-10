@@ -16,9 +16,6 @@ dispatcher = updater.dispatcher
 registerCommand(dispatcher, "start", start)
 registerCommand(dispatcher, "station", station)
 
-# Add QRcode handler
-dispatcher.add_handler(qrcodeHandler)
-
 # Set up database to contain letters for each station
 DBHandler = MessageHandler(Filters.text, addWithMessage)
 dispatcher.add_handler(DBHandler)

@@ -15,7 +15,7 @@ def addWithMessage(bot, update):
 	print("addWithMessage called")
 	text = update.message.text
 	bot.send_message(chat_id=update.message.chat_id, text=text)
-	db.add_item("text")
+	db.add_item(text)
 	print("2")
 	items = db.get_items()
 	message = "\n".join(items)
