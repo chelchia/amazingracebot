@@ -4,8 +4,7 @@ from telegram.ext import Updater, MessageHandler, Filters
 
 from settings import token
 from commands import *
-from qrcodeHandler import qrcodeHandler
-from database import addWithMessage, db
+from database import addLetter
 
 # Initialisation
 bot = telegram.Bot(token)
@@ -15,10 +14,15 @@ dispatcher = updater.dispatcher
 # Register commands
 registerCommand(dispatcher, "start", start)
 registerCommand(dispatcher, "station", station)
+registerCommand(dispatcher, "my_house_letters", my_house_letters)
+registerCommand(dispatcher, "all_house_letters", all_house_letters)
 
-# Set up database to contain letters for each station
-DBHandler = MessageHandler(Filters.text, addWithMessage)
+
+# === for testing purposes only. Adds a letter to triton and ianthe by texting ===
+DBHandler = MessageHandler(Filters.text, addLetter)
 dispatcher.add_handler(DBHandler)
+#TODO: work with meena on station and letters
+# ===
 
 # Polling for updates
 updater.start_polling()
