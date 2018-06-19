@@ -25,7 +25,7 @@ CONFIRMATION_REQUEST = 1
 def start(bot, update):
     reply_keyboard = [['Ursaia'], ['Nocturna'], ['Ianthe'], ['Triton'], ['Ankaa'], ['Saren']]
     reply_markup = telegram.ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-    update.message.reply_text(text="Please Choose Your House!", reply_markup = reply_markup)
+    update.message.reply_text(text="Please Choose Your House! (Type '/cancel' to quit)", reply_markup = reply_markup)
     return CONFIRMATION_REQUEST
 
 
