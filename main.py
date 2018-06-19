@@ -2,7 +2,7 @@ import requests
 import telegram
 from telegram.ext import (Updater, MessageHandler, Filters, ConversationHandler, CommandHandler, RegexHandler)
 
-# from settings import token
+from settings import token
 from commands import *
 # from database import addLetter
 
@@ -11,8 +11,8 @@ from databaseYF import DBHelper
 db = DBHelper()
 
 # Initialisation
-bot = telegram.Bot("561039995:AAGwINDFUT-28gbMFaRkuVvsIP2BcnrSzYM")
-updater = Updater("561039995:AAGwINDFUT-28gbMFaRkuVvsIP2BcnrSzYM")
+bot = telegram.Bot(token)
+updater = Updater(token)
 dispatcher = updater.dispatcher
 
 # Register commands
