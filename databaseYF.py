@@ -10,10 +10,7 @@ class DBHelper:
     def setup(self):
         print("creating chat_id/house table (if it does not exits)")
         houses_table = "CREATE TABLE IF NOT EXISTS houses (chat_id text, house text)"
-        #print("creating code/house/letter table")
-        #letters_table = "CREATE TABLE IF NOT EXISTS letters (code text, house text, letter text)"
         self.c.execute(houses_table)
-        #self.c.execute(letters_table)
         self.conn.commit()
 
     def add_house(self, chat_id, house):
@@ -21,12 +18,6 @@ class DBHelper:
         args = (chat_id, house)
         self.c.execute(stmt, args)
         self.conn.commit()
-
-#    def delete_user(self, chat_id, house):
- #       stmt = "DELETE FROM houses WHERE chat_id = (?) AND house = (?)"
-   #     args = (chat_id, house)
-  #      self.c.execute(stmt, args)
-    #    self.conn.commit()
 
     def get_house(self, chat_id):
         stmt = "SELECT house FROM houses WHERE chat_id = (?)"
