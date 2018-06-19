@@ -40,12 +40,12 @@ def registerHouse(bot, update):
         update.message.reply_text(text = "What! Wanna check again?! Type '/start' to choose another house", reply_markup=telegram.ReplyKeyboardRemove())
         return ConversationHandler.END
     else:
-        db.add_house(chat_id, text)
-        logger.info("Team %s has been registered by %s.", text, update.message.from_user.first_name)
-        update.message.reply_text(text = "AWESOME! Team {} will be my favourite house now!".format(text), reply_markup=telegram.ReplyKeyboardRemove())
         reply_keyboard = [["/my_house_letters", "/all_house_letters"]]
         reply_markup = telegram.ReplyKeyboardMarkup(reply_keyboard)
         house = db.get_house(chat_id)
+        db.add_house(chat_id, text)
+        logger.info("Team %s has been registered by %s.", text, update.message.from_user.first_name)
+        update.message.reply_text(text = "AWESOME! Team {} will be my favourite house now!".format(text), reply_markup=reply_markup)
         bot.sendMessage(chat_id=chat_id,text = "Press '/my_house_letters' to see the letter(s) Team {} has collected.\n\nPress '/all_house_letters' to see the letter(s) that other houses have collected.".format(house), replymark_up=reply_markup)
 # /cancel
 # Just in case, the user does not wants to register a house
@@ -67,7 +67,10 @@ def my_house_letters(bot, update):
     logger.info("%s from Team %s wants to view their letters.", update.message.from_user.first_name, house)
     letters = houseDB.get_house_letters(house) 
     message = house + ":\n" + "\n".join(letters)
-    bot.send_message(chat_id=chat_id, text=message) 
+    reply_keyboard = [["/my_house_letters", "/all_house_letters"]]
+    reply_markup = telegram.ReplyKeyboardMarkup(reply_keyboard)
+    house = db.get_house(chat_id)
+    bot.send_message(chat_id=chat_id, text=message, reply_markup = reply_markup) 
 
 # /all_house_letters
 def all_house_letters(bot, update):
@@ -77,6 +80,9 @@ def all_house_letters(bot, update):
         for house in HOUSES:
                 letters = houseDB.get_house_letters(house)
                 message = message + house + ":\n" + ", ".join(letters) + "\n"
+        reply_keyboard = [["/my_house_letters", "/all_house_letters"]]
+        reply_markup = telegram.ReplyKeyboardMarkup(reply_keyboard)
+        house = db.get_house(chat_id)
         bot.send_message(chat_id=chat_id, text=message) #database
         logger.info("%s from Team %s wants to view the letters from all the houses.", update.message.from_user.first_name, house)
 
