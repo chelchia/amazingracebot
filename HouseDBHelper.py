@@ -1,5 +1,6 @@
 import sqlite3
 
+# Database: houseDB.sqlite
 # Table: houseLetters
 # Columns: house, letters
 
