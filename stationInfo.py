@@ -17,6 +17,13 @@ class Station:
 	def print_station(self):
 		return "Station " + str(self.number) + ": " + self.location + "\nLetters: " + self.print_letters() + "\n"
 
+class KeyStation(Station):
+	def __init__(self, num, location, letters):
+		Station.__init__(self, num, "", location, letters, "")
+
+	def print_station(self):
+		return "Key Station " + str(self.number) + ": " + self.location + "\nLetters: " + self.print_letters() + "\n"
+
 
 # Dictionary of stations
 stations = {}
@@ -24,7 +31,7 @@ stations = {}
 num = 1
 instruction = "instructions 1"
 location = "location 1"
-letters = ['A', 'B']
+letters = ['Z']
 password = "password1"
 station = Station(num, instruction, location, letters, password)
 stations[num] = station
@@ -40,6 +47,39 @@ stations[num] = station
 
 
 
+# === Key stations ===
+keyStations = {}
+
+num = 'A'
+location = "MPSH 1"
+letters = ['A', 'E']
+station = KeyStation(num, location, letters)
+keyStations[num] = station
+
+num = 'B'
+location = "YIH wooden open area (beside subway)"
+letters = ['B', 'F']
+station = KeyStation(num, location, letters)
+keyStations[num] = station
+
+num = 'C'
+location = "Central library"
+letters = ['C', 'G']
+station = KeyStation(num, location, letters)
+keyStations[num] = station
+
+num = 'D'
+location = "Outside LT27, Science"
+letters = ['D', 'H']
+station = KeyStation(num, location, letters)
+keyStations[num] = station
+
+
+key_station_passwords = {
+	'winA': ['A'],
+	'loseA': ['E'],
+	'winB': ['B']
+}
 
 
 

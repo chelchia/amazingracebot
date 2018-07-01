@@ -1,7 +1,7 @@
 import telegram
 from telegram.ext import (CommandHandler, ConversationHandler, RegexHandler)
 from database import houseDB, chatDB, stationDB
-from stationInfo import stations
+from stationInfo import stations, keyStations, key_station_passwords
 
 # ===== Enable logging ======
 import logging
@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 # ===== Global variables =====
 HOUSES = ("Ursaia", "Nocturna", "Ianthe", "Triton", "Ankaa", "Saren")
 CONFIRMATION_REQUEST = 1
-NUM_STATIONS = 2 # Change!
-
+NUM_OPTIONAL_STATIONS = 2 # Change!
+NUM_KEY_STATIONS = 4
 
 
 # ====== Bot commands ======
@@ -135,7 +135,10 @@ def all_house_letters(bot, update):
 def station_overview(bot, update):
     chat_id = update.message.chat_id
     message = ""
-    for stnNum in range(1, NUM_STATIONS + 1):
+    for stnNum in keyStations:
+        keyStn = keyStations[stnNum]
+        message = message + keyStn.print_station() + "\n"
+    for stnNum in range(1, NUM_OPTIONAL_STATIONS + 1):
         letters_left = str(stationDB.get_letters_left(stnNum))
         message = message + stations[stnNum].print_station() + "Redemptions left - " + letters_left + "\n\n"
 
@@ -149,21 +152,33 @@ def station_complete(bot, update):
     chat_id = update.message.chat_id
     if (chatDB.is_chat_registered(chat_id)):
         text = update.message.text
-        for stnNum in range(1, NUM_STATIONS + 1):
+        house = chatDB.get_house(chat_id)
+        found_match = False
+        for stnNum in range(1, NUM_OPTIONAL_STATIONS + 1):
             stn = stations[stnNum]
-            if (text == stn.password and stationDB.get_letters_left(stnNum) > 0):
-                # Add letters to house
-                house = chatDB.get_house(chat_id)
-                houseDB.add_letters(house, stn.letters)
-
+            # If password is correct, and there are letters left, and the house has not already collected them
+            if (text == stn.password and stationDB.get_letters_left(stnNum) > 0 and not houseDB.already_collected(house, stn.letters[0])):
+                found_match = True
+                give_house_letters(bot, chat_id, stn.letters)
+                
                 # Decrease letter count
                 stationDB.decrease_letter_count(stnNum)
-
-                logger.info("%s added to %s.", stn.print_letters(), house)
-                message = "Unlocked: " + stn.print_letters() + "!"
-                bot.send_message(chat_id=chat_id, text=message)
                 break
-    
+        if (not found_match):
+            match = key_station_passwords.get(text)
+            if (match != None and not houseDB.already_collected(house, match[0])):
+                give_house_letters(bot, chat_id, match)
+
+
+def give_house_letters(bot, chat_id, letters):
+    # Add letters to house
+    house = chatDB.get_house(chat_id)
+    houseDB.add_letters(house, letters)
+
+    logger.info("%s added to %s.", ', '.join(letters), house)
+    message = "Unlocked: " + ', '.join(letters) + "!"
+    bot.send_message(chat_id=chat_id, text=message)
+
 
 # =======================
 

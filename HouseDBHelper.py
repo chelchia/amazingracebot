@@ -4,6 +4,7 @@ import sqlite3
 # Table: houseLetters
 # Columns: house, letters
 
+# Stores all letters collected by houses.
 class HouseDBHelper:
     def __init__(self, dbname="houseDB.sqlite"):
         self.dbname = dbname
@@ -33,4 +34,11 @@ class HouseDBHelper:
         stmt = "SELECT letters FROM houseLetters WHERE house = (?)"
         args = (house_name,)
         return [x[0] for x in self.conn.execute(stmt, args)]
+
+    def already_collected(self, house, letter):
+        house_letters = self.get_house_letters(house)
+        if letter in house_letters:
+            return True
+        else:
+            return False
 
