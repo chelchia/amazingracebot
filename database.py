@@ -1,18 +1,17 @@
 from HouseDBHelper import HouseDBHelper
 from ChatDBHelper import ChatDBHelper
+from StationDBHelper import StationDBHelper
 
 global houseDB
 houseDB = HouseDBHelper()
 houseDB.setup()
 
-# mychange 
 global chatDB
 chatDB = ChatDBHelper()
 chatDB.setup()
 
+global stationDB
+stationDB = StationDBHelper()
+stationDB.setup()
 
-#def addLetter(bot, update):
-#	text = update.message.text
-#	houseDB.add_letter("TRITON", text)
-#	houseDB.add_letter("IANTHE", text)
 

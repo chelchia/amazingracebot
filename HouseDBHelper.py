@@ -10,7 +10,7 @@ class HouseDBHelper:
         self.conn = sqlite3.connect(dbname, check_same_thread=False)
 
     def setup(self):
-        # self.conn.execute("DROP TABLE IF EXISTS houseLetters") #(for testing purposes)
+        self.conn.execute("DROP TABLE IF EXISTS houseLetters") #(for testing purposes)
         print("creating houseLetters table (if it does not exist)")
         stmt = "CREATE TABLE IF NOT EXISTS houseLetters (house text, letters text)"
         self.conn.execute(stmt)
@@ -18,7 +18,11 @@ class HouseDBHelper:
         self.conn.execute("CREATE INDEX IF NOT EXISTS house_index ON houseLetters (house)")
         self.conn.commit()
 
-    def add_letter(self, house_text, letter_text):
+    def add_letters(self, house_text, tuple):
+        for letter in tuple:
+            self.add_one_letter(house_text, letter)
+
+    def add_one_letter(self, house_text, letter_text):
         stmt = "INSERT INTO houseLetters VALUES (?, ?)"
         args = (house_text, letter_text, )
         self.conn.execute(stmt, args)
