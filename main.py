@@ -4,11 +4,7 @@ from telegram.ext import (Updater, MessageHandler, Filters, ConversationHandler,
 
 from settings import token
 from commands import *
-# from database import addLetter
 
-#======= Edits from yaofeng =====
-# from databaseYF import DBHelper
-# db = DBHelper()
 
 # Initialisation
 bot = telegram.Bot(token)
@@ -16,31 +12,36 @@ updater = Updater(token)
 dispatcher = updater.dispatcher
 
 # Register commands
-# registerCommand(dispatcher, "remove", remove)
 registerCommand(dispatcher, "my_house_letters", my_house_letters)
 registerCommand(dispatcher, "all_house_letters", all_house_letters)
+registerCommand(dispatcher, "station_overview", station_overview)
+registerCommand(dispatcher, "help", help)
 
-
-# Add conversation handler
-conv_handler = ConversationHandler(
-        entry_points = [CommandHandler('start', start)],
-
+# 'Start' conversation handler -- register house with bot
+start_conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start', start)],
         states={
-
             CONFIRMATION_REQUEST: [RegexHandler('^(Ursaia|Nocturna|Ianthe|Triton|Ankaa|Saren)$', registerHouse)],
-
             },
-
-        fallbacks= [CommandHandler('remove', remove)]
+        fallbacks=[CommandHandler('remove', remove), CommandHandler('cancel', cancel)]
         )
-dispatcher.add_handler(conv_handler)
+dispatcher.add_handler(start_conv_handler)
+
+# 'Play' conversation handler -- output station instructions
+play_conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('play', play)],
+        states={
+            CONFIRMATION_REQUEST: [MessageHandler(Filters.text, get_instructions)],
+            },
+        fallbacks=[CommandHandler('cancel', cancel)]
+        )
+dispatcher.add_handler(play_conv_handler)
 
 
-# === for testing purposes only. Adds a letter to triton and ianthe by texting ===
-#DBHandler = MessageHandler(Filters.text, addLetter)
-#dispatcher.add_handler(DBHandler)
-#TODO: work with meena on station and letters
-# ===
+# Message handler for station completion
+completion_handler = MessageHandler(Filters.text, station_complete)
+dispatcher.add_handler(completion_handler)
+
 
 # Polling for updates
 updater.start_polling()

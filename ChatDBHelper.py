@@ -11,7 +11,7 @@ class ChatDBHelper:
         self.c = self.conn.cursor()
 
     def setup(self):
-        # self.conn.execute("DROP TABLE IF EXISTS house_group_chats ") #(for testing purposes)
+        self.conn.execute("DROP TABLE IF EXISTS house_group_chats ") #(for testing purposes)
         print("creating chat_id/house table (if it does not exist)")
         houses_table = "CREATE TABLE IF NOT EXISTS house_group_chats (chat_id integer, house text)"
         self.c.execute(houses_table)
