@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 # ===== Global variables =====
 HOUSES = ("Ursaia", "Nocturna", "Ianthe", "Triton", "Ankaa", "Saren")
 CONFIRMATION_REQUEST = 1
-NUM_OPTIONAL_STATIONS = 2 # Change!
+NUM_OPTIONAL_STATIONS = 10 # Change!
 NUM_KEY_STATIONS = 4
 
 
@@ -44,13 +44,14 @@ def registerHouse(bot, update):
         update.message.reply_text(text = "This chat has already been assigned a house! Type '/remove' to remove this chat's house, then '/start' to register a house.", reply_markup=telegram.ReplyKeyboardRemove())
         return ConversationHandler.END
     else:
-        reply_keyboard = [["/my_house_letters", "/all_house_letters"]]
-        reply_markup = telegram.ReplyKeyboardMarkup(reply_keyboard)
+        # reply_keyboard = [["/my_house_letters", "/all_house_letters"]]
+        # reply_markup = telegram.ReplyKeyboardMarkup(reply_keyboard)
         chatDB.add_house(chat_id, text)
         house = chatDB.get_house(chat_id)
         logger.info("Team %s has been registered by %s.", text, update.message.from_user.first_name)
-        update.message.reply_text(text = "AWESOME! {} will be my favourite house now!".format(text), reply_markup=reply_markup)
-        bot.sendMessage(chat_id=chat_id,text = "Press '/my_house_letters' to see the letter(s) Team {} has collected.\n\nPress '/all_house_letters' to see the letter(s) that other houses have collected.".format(house), replymark_up=reply_markup)
+        update.message.reply_text(text = "AWESOME! {} will be my favourite house now!".format(text))
+        # bot.sendMessage(chat_id=chat_id,text = "Press '/my_house_letters' to see the letter(s) {} has collected.\n\nPress '/all_house_letters' to see the letter(s) that other houses have collected.".format(house), replymark_up=reply_markup)
+        bot.sendMessage(chat_id=chat_id,text = "Press '/help' to see a list of commands and instructions.")
 
 
 # /remove
@@ -80,21 +81,51 @@ def play(bot, update):
 # Callback function for station instructions
 def get_instructions(bot, update):
     chat_id = update.message.chat_id
-    stationNumber = int(update.message.text)
-    station = stations.get(stationNumber)
-    if station == None:
-        message = "Station number " + stationNumber + " doesn't exist."
+    text = update.message.text
+    if ((text).isdigit()):
+        stationNumber = int(text)
+        station = stations.get(stationNumber)
+        if station == None:
+            logger.info("%s calling non-existent station %s.", update.message.from_user.first_name, stationNumber)
+            message = "Station number " + str(stationNumber) + " doesn't exist."
+        else:
+            message = station.print_instructions()
     else:
-        message = station.print_instructions()
+        message = "Station " + text + " doesn't exist."
 
-    logger.info("%s requesting instructions for station %s.", update.message.from_user.first_name, stationNumber)
-    bot.send_message(chat_id=chat_id, text=message)
+    logger.info("%s requesting instructions for station %s.", update.message.from_user.first_name, text)
+    bot.send_message(chat_id=chat_id, text=message, parse_mode="Markdown")
     return ConversationHandler.END
+
+def isInt(s):
+    try: 
+        int(s)
+        return True
+    except ValueError:
+        return False
 
 
 # dummy callback for conversation ender
 def cancel(bot, update):
     return ConversationHandler.END
+
+
+# /help
+def help(bot, update):
+    chat_id = update.message.chat_id
+    message = """Upon reaching station:
+    /play - To receive instructions for the mission. I'll prompt you for the station number
+    After completing the mission, OGLs will give you a password to unlock the station's letters.
+    
+    Other commands:
+    /my_house_letters - View your house letters
+    /all_house_letters - View all house letters
+    /station_overview - Overview of all station locations and letters available. Note which letters are running out!!
+    /start - Register your house
+    /remove - Unregister your house"""
+
+    logger.info("%s requesting help.", update.message.from_user.first_name)
+    bot.send_message(chat_id=chat_id, text=message)
 
 
 # /my_house_letters
@@ -103,15 +134,12 @@ def my_house_letters(bot, update):
     if (chatDB.is_chat_registered(chat_id)):
         house = chatDB.get_house(chat_id)
         letters = houseDB.get_house_letters(house) 
-        message = house + ":\n" + "\n".join(letters)
+        message = "*" + house + "*:\n" + "\n".join(letters)
 
-        logger.info("%s from Team %s wants to view their letters.", update.message.from_user.first_name, house)
+        logger.info("%s from %s wants to view their letters.", update.message.from_user.first_name, house)
     else:
         message = "Chat not registered yet."
-    # reply_keyboard = [["/my_house_letters", "/all_house_letters"]]
-    # reply_markup = telegram.ReplyKeyboardMarkup(reply_keyboard)
-    # bot.send_message(chat_id=chat_id, text=message, reply_markup = reply_markup) 
-    bot.send_message(chat_id=chat_id, text=message)
+    bot.send_message(chat_id=chat_id, text=message, parse_mode="Markdown")
 
 
 # /all_house_letters
@@ -121,14 +149,14 @@ def all_house_letters(bot, update):
         message = ""
         for house in HOUSES:
             letters = houseDB.get_house_letters(house)
-            message = message + house + ":\n" + ", ".join(letters) + "\n"
+            message = message + "*" + house + "*:\n" + ", ".join(letters) + "\n"
 
         house = chatDB.get_house(chat_id)
-        logger.info("%s from Team %s wants to view all house letters.", update.message.from_user.first_name, house)
+        logger.info("%s from %s wants to view all house letters.", update.message.from_user.first_name, house)
     else:
         message = "Chat not registered yet."
 
-    bot.send_message(chat_id=chat_id, text=message)
+    bot.send_message(chat_id=chat_id, text=message, parse_mode="Markdown")
 
 
 # /station_overview
@@ -143,7 +171,7 @@ def station_overview(bot, update):
         message = message + stations[stnNum].print_station() + "Redemptions left - " + letters_left + "\n\n"
 
     logger.info("%s wants to view station overview.", update.message.from_user.first_name)
-    bot.send_message(chat_id=chat_id, text=message)
+    bot.send_message(chat_id=chat_id, text=message, parse_mode="Markdown")
 
 # ========= end ==========
 

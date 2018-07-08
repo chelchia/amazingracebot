@@ -15,6 +15,7 @@ dispatcher = updater.dispatcher
 registerCommand(dispatcher, "my_house_letters", my_house_letters)
 registerCommand(dispatcher, "all_house_letters", all_house_letters)
 registerCommand(dispatcher, "station_overview", station_overview)
+registerCommand(dispatcher, "help", help)
 
 # 'Start' conversation handler -- register house with bot
 start_conv_handler = ConversationHandler(
@@ -30,7 +31,7 @@ dispatcher.add_handler(start_conv_handler)
 play_conv_handler = ConversationHandler(
         entry_points=[CommandHandler('play', play)],
         states={
-            CONFIRMATION_REQUEST: [RegexHandler('^(1|2|3|4|5|6|7|8|9|10)$', get_instructions)],
+            CONFIRMATION_REQUEST: [MessageHandler(Filters.text, get_instructions)],
             },
         fallbacks=[CommandHandler('cancel', cancel)]
         )
