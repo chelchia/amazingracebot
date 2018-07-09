@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 # ===== Global variables =====
-HOUSES = ("Ursaia", "Nocturna", "Ianthe", "Triton", "Ankaa", "Saren")
+HOUSES = ("Ilykoie", "Neo", "Laventus", "Oneiroi", "Alerion", "Rabanna")
 CONFIRMATION_REQUEST = 1
 NUM_OPTIONAL_STATIONS = 10 # Change!
 NUM_KEY_STATIONS = 4
@@ -20,12 +20,12 @@ NUM_KEY_STATIONS = 4
 # ====== Bot commands ======
 
 # /start
-# After user enters "/start", the bot will prompt the user for their house (Ursaia, Nocturna, Ianthe, Ankaa, Saren) using custom keyboard
+# After user enters "/start", the bot will prompt the user for their house using custom keyboard
 # After user enters their house, the bot will automatically call the registerHouse() method, 
 # evaluating whether that house is already registered in our database and output the corresponding messages
 def start(bot, update):
     user = update.message.from_user.username
-    reply_keyboard = [['Ursaia'], ['Nocturna'], ['Ianthe'], ['Triton'], ['Ankaa'], ['Saren']]
+    reply_keyboard = [['Ilykoie'], ['Neo'], ['Laventus'], ['Oneiroi'], ['Alerion'], ['Rabanna']]
     reply_markup = telegram.ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     text = "@" + user + " Please Choose Your House! (Type '/cancel' to quit)"
     update.message.reply_text(text= text, reply_markup = reply_markup)
@@ -50,7 +50,6 @@ def registerHouse(bot, update):
         house = chatDB.get_house(chat_id)
         logger.info("Team %s has been registered by %s.", text, update.message.from_user.first_name)
         update.message.reply_text(text = "AWESOME! {} will be my favourite house now!".format(text))
-        # bot.sendMessage(chat_id=chat_id,text = "Press '/my_house_letters' to see the letter(s) {} has collected.\n\nPress '/all_house_letters' to see the letter(s) that other houses have collected.".format(house), replymark_up=reply_markup)
         bot.sendMessage(chat_id=chat_id,text = "Press '/help' to see a list of commands and instructions.")
 
 
@@ -74,7 +73,10 @@ def remove(bot, update):
 def play(bot, update):
     chat_id = update.message.chat_id
     message = "Station number?"
-    bot.send_message(chat_id=chat_id, text=message)
+    reply_keyboard = [['1'], ['2'], ['3'], ['4'], ['5'], ['6'], ['7'], ['8'], ['9'], ['10']]
+    reply_markup = telegram.ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+
+    bot.send_message(chat_id=chat_id, text=message, reply_markup=reply_markup)
     return CONFIRMATION_REQUEST
 
 
@@ -108,6 +110,7 @@ def isInt(s):
 
 # dummy callback for conversation ender
 def cancel(bot, update):
+    logger.info("%s cancelled.", update.message.from_user.first_name)
     return ConversationHandler.END
 
 
@@ -175,6 +178,7 @@ def station_overview(bot, update):
     bot.send_message(chat_id=chat_id, text=message, parse_mode="Markdown")
 
 # ========= end ==========
+
 
 # Callback for station completion (when a password is keyed in to obtain a letter)
 def station_complete(bot, update):

@@ -173,6 +173,14 @@ key_station_passwords = {
 }
 
 
+def genPasswordRegex(op_stations, key_station_passwords):
+	stn_passwords = {}
+	for stnnum in op_stations:
+		stn_passwords[stnnum] = op_stations[stnnum].password
+	regex = "^(" + '|'.join(stn_passwords.values()) + "|" + '|'.join(key_station_passwords.keys()) + ")$"
+	return regex
+
+all_password_regex = genPasswordRegex(stations, key_station_passwords)
 
 
 

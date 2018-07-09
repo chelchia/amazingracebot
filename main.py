@@ -4,6 +4,7 @@ from telegram.ext import (Updater, MessageHandler, Filters, ConversationHandler,
 
 from settings import token
 from commands import *
+from stationInfo import all_password_regex
 
 
 # Initialisation
@@ -21,7 +22,7 @@ registerCommand(dispatcher, "help", help)
 start_conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
         states={
-            CONFIRMATION_REQUEST: [RegexHandler('^(Ursaia|Nocturna|Ianthe|Triton|Ankaa|Saren)$', registerHouse)],
+            CONFIRMATION_REQUEST: [RegexHandler('^(Ilykoie|Neo|Laventus|Oneiroi|Alerion|Rabanna)$', registerHouse)],
             },
         fallbacks=[CommandHandler('remove', remove), CommandHandler('cancel', cancel)]
         )
@@ -31,7 +32,7 @@ dispatcher.add_handler(start_conv_handler)
 play_conv_handler = ConversationHandler(
         entry_points=[CommandHandler('play', play)],
         states={
-            CONFIRMATION_REQUEST: [MessageHandler(Filters.text, get_instructions)],
+            CONFIRMATION_REQUEST: [RegexHandler('^(1|2|3|4|5|6|7|8|9|10)$', get_instructions)],
             },
         fallbacks=[CommandHandler('cancel', cancel)]
         )
@@ -39,7 +40,7 @@ dispatcher.add_handler(play_conv_handler)
 
 
 # Message handler for station completion
-completion_handler = MessageHandler(Filters.text, station_complete)
+completion_handler = RegexHandler(all_password_regex, station_complete)
 dispatcher.add_handler(completion_handler)
 
 
