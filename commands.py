@@ -82,6 +82,7 @@ def play(bot, update):
 def get_instructions(bot, update):
     chat_id = update.message.chat_id
     text = update.message.text
+    logger.info("%s get instructions called for station %s.", update.message.from_user.first_name, text)
     if ((text).isdigit()):
         stationNumber = int(text)
         station = stations.get(stationNumber)
