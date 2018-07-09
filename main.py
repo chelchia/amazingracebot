@@ -17,6 +17,7 @@ registerCommand(dispatcher, "my_house_letters", my_house_letters)
 registerCommand(dispatcher, "all_house_letters", all_house_letters)
 registerCommand(dispatcher, "station_overview", station_overview)
 registerCommand(dispatcher, "help", help)
+registerCommand(dispatcher, "password", password)
 
 # 'Start' conversation handler -- register house with bot
 start_conv_handler = ConversationHandler(

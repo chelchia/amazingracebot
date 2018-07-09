@@ -44,13 +44,10 @@ def registerHouse(bot, update):
         update.message.reply_text(text = "This chat has already been assigned a house! Type '/remove' to remove this chat's house, then '/start' to register a house.", reply_markup=telegram.ReplyKeyboardRemove())
         return ConversationHandler.END
     else:
-        # reply_keyboard = [["/my_house_letters", "/all_house_letters"]]
-        # reply_markup = telegram.ReplyKeyboardMarkup(reply_keyboard)
         chatDB.add_house(chat_id, text)
         house = chatDB.get_house(chat_id)
         logger.info("Team %s has been registered by %s.", text, update.message.from_user.first_name)
-        update.message.reply_text(text = "AWESOME! {} will be my favourite house now!".format(text))
-        bot.sendMessage(chat_id=chat_id,text = "Press '/help' to see a list of commands and instructions.")
+        update.message.reply_text(text = "AWESOME! {} will be my favourite house now! Press '/help' to see a list of commands and instructions.".format(text))
 
 
 # /remove
@@ -73,7 +70,7 @@ def remove(bot, update):
 def play(bot, update):
     chat_id = update.message.chat_id
     message = "Station number?"
-    reply_keyboard = [['1'], ['2'], ['3'], ['4'], ['5'], ['6'], ['7'], ['8'], ['9'], ['10']]
+    reply_keyboard = [['1', '2', '3', '4', '5'], ['6', '7', '8', '9', '10']]
     reply_markup = telegram.ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
 
     bot.send_message(chat_id=chat_id, text=message, reply_markup=reply_markup)
@@ -176,6 +173,16 @@ def station_overview(bot, update):
 
     logger.info("%s wants to view station overview.", update.message.from_user.first_name)
     bot.send_message(chat_id=chat_id, text=message, parse_mode="Markdown")
+
+
+# /password
+def password(bot, update):
+    chat_id = update.message.chat_id
+    sender = update.message.from_user.username
+    message = "@" + sender + " reply to this message with the station password"
+    forceReplyObj = telegram.ForceReply(force_reply=True, selective=False)
+    bot.send_message(chat_id=chat_id, text=message, reply_markup=forceReplyObj)
+
 
 # ========= end ==========
 
