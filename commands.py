@@ -116,8 +116,8 @@ def help(bot, update):
     chat_id = update.message.chat_id
     message = """Upon reaching station:
     /play - To receive instructions for the mission. I'll prompt you for the station number
-    After completing the mission, OGLs will give you a password to unlock the station's letters.
-    
+    /password - After completing the mission, OGLs will give you a password to unlock the station's letters.
+
     Other commands:
     /my_house_letters - View your house letters
     /all_house_letters - View all house letters
