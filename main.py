@@ -29,15 +29,19 @@ start_conv_handler = ConversationHandler(
         )
 dispatcher.add_handler(start_conv_handler)
 
+
 # 'Play' conversation handler -- output station instructions
-play_conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('play', play)],
-        states={
-            CONFIRMATION_REQUEST: [RegexHandler('^(1|2|3|4|5|6|7|8|9|10|11)$', get_instructions)],
-            },
-        fallbacks=[CommandHandler('cancel', cancel)]
-        )
-dispatcher.add_handler(play_conv_handler)
+# play_conv_handler = ConversationHandler(
+#         entry_points=[CommandHandler('play', play)],
+#         states={
+#             CONFIRMATION_REQUEST: [RegexHandler('^(1|2|3|4|5|6|7|8|9|10|11)$', get_instructions)],
+#             },
+#         fallbacks=[CommandHandler('cancel', cancel)]
+#         )
+# dispatcher.add_handler(play_conv_handler)
+registerCommand(dispatcher, "play", play)
+play_handler = RegexHandler('^(1|2|3|4|5|6|7|8|9|10|11)$', get_instructions)
+dispatcher.add_handler(play_handler)
 
 
 # Message handler for station completion

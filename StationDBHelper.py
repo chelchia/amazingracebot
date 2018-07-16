@@ -1,10 +1,11 @@
 import sqlite3
+from stationInfo import NUM_OPTIONAL_STATIONS
 
 # Database: stationDB.sqlite
 # Table: stations
 # Columns: stn_number, letters_left
 
-NUM_STATIONS = 10
+NUM_OPTIONAL_STATIONS = 11
 DEFAULT_REDEMPTIONS = 3
 
 class StationDBHelper:
@@ -20,7 +21,7 @@ class StationDBHelper:
         self.conn.execute(stmt)
         self.conn.commit()
 
-        for stn in range(1, NUM_STATIONS + 1):
+        for stn in range(1, NUM_OPTIONAL_STATIONS + 1):
             stmt = "INSERT INTO stations VALUES (?, ?)"
             args = (stn, DEFAULT_REDEMPTIONS,)
             self.conn.execute(stmt, args)

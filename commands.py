@@ -72,14 +72,13 @@ def play(bot, update):
     reply_markup = telegram.ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
 
     bot.send_message(chat_id=chat_id, text=message, reply_markup=reply_markup)
-    return CONFIRMATION_REQUEST
+    # return CONFIRMATION_REQUEST
 
 
 # Callback function for station instructions
 def get_instructions(bot, update):
     chat_id = update.message.chat_id
     text = update.message.text
-    logger.info("%s get instructions called for station %s.", update.message.from_user.first_name, text)
     if ((text).isdigit()):
         stationNumber = int(text)
         station = stations.get(stationNumber)
@@ -93,7 +92,7 @@ def get_instructions(bot, update):
 
     logger.info("%s requesting instructions for station %s.", update.message.from_user.first_name, text)
     bot.send_message(chat_id=chat_id, text=message, parse_mode="Markdown")
-    return ConversationHandler.END
+    # return ConversationHandler.END
 
 def isInt(s):
     try: 
