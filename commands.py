@@ -1,7 +1,7 @@
 import telegram
 from telegram.ext import (CommandHandler, ConversationHandler, RegexHandler)
 from database import houseDB, chatDB, stationDB
-from stationInfo import stations, keyStations, key_station_passwords
+from stationInfo import stations, keyStations, key_station_passwords, NUM_OPTIONAL_STATIONS
 
 # ===== Enable logging ======
 import logging
@@ -13,8 +13,6 @@ logger = logging.getLogger(__name__)
 # ===== Global variables =====
 HOUSES = ("Ilykoie", "Neo", "Laventus", "Oneiroi", "Alerion", "Rabanna")
 CONFIRMATION_REQUEST = 1
-NUM_OPTIONAL_STATIONS = 10 # Change!
-NUM_KEY_STATIONS = 4
 
 
 # ====== Bot commands ======
@@ -70,7 +68,7 @@ def remove(bot, update):
 def play(bot, update):
     chat_id = update.message.chat_id
     message = "Station number?"
-    reply_keyboard = [['1', '2', '3', '4', '5'], ['6', '7', '8', '9', '10']]
+    reply_keyboard = [['1', '2', '3', '4', '5'], ['6', '7', '8', '9', '10', '11']]
     reply_markup = telegram.ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
 
     bot.send_message(chat_id=chat_id, text=message, reply_markup=reply_markup)

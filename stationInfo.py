@@ -1,5 +1,9 @@
 # All information regarding stations.
 
+NUM_OPTIONAL_STATIONS = 11 # Change!
+NUM_KEY_STATIONS = 4
+
+
 class Station:
 	def __init__(self, num, instruction_text, location_text, letter_tuple, password_text):
 		self.number = num
@@ -32,7 +36,7 @@ num = 1
 instruction = """*Catch no ball*
 The house must hit a paper ball 50 times with their elbows or feet ONLY without it touching the floor.
 """
-location = "area outside MPSH 5"
+location = "Outside museum"
 letters = ['F']
 password = "1TZfhZ"
 station = Station(num, instruction, location, letters, password)
@@ -40,7 +44,7 @@ stations[num] = station
 
 num = 2
 instruction = """*Music Whispers*
-Houses pick 6 people, of which 5 people to wear earphones blasting music. The freshie without earphones will be the first in line. They are supposed to pass a long message down the line without shouting (normal voice). OGLs will receive several long messages before the race to tell the first freshie in line. At the end, OGLs will ask a question to the last freshie related to the details in the message. The house will play 3 rounds, each round with 5 different people. If the house answers with 2/3 rounds correctly, they succeed.
+Houses pick 6 people, of which 5 people will wear earphones blasting music. The freshie without earphones will be the first in line. They are supposed to pass a long message down the line without shouting (normal voice). OGLs will receive several long messages before the race to tell the first freshie in line. At the end, OGLs will ask a question to the last freshie on the details in the message. The house will play 3 rounds, each round with 5 different people. If the house answers with 2/3 rounds correctly, they succeed.
 """
 location = "University Sports Centre area beside carpark"
 letters = ['S', 'G']
@@ -54,7 +58,7 @@ Split the house into equal halves (if there are an odd number of freshies one OG
 
 The sequence is: 6, 11, 9, 2, 10, 1, 1, 13, 1, 9, 5, 18, 5, 12, 20, 9, 14, 1, 7, 2
 """
-location = "University Sports Centre level 2 area beside rock climbing wall"
+location = "YIH level 4 area in front of study lounge"
 letters = ['A', 'X']
 password = "3AwMQa"
 station = Station(num, instruction, location, letters, password)
@@ -81,7 +85,8 @@ station = Station(num, instruction, location, letters, password)
 stations[num] = station
 
 num = 6
-instruction = """*Guess the drink*\nIMPT: OGLs please check for any allergies before starting this game!!!
+instruction = """*Guess the drink*
+IMPT: OGLs please check for any allergies before starting this game!!!
 Send 5 freshies to buy mixed fruit drinks at the drinks stall (get 5 drinks). The other freshies in the house must guess the fruits in each drink correctly.
 """
 location = "The Deck"
@@ -116,7 +121,7 @@ The house must gather items whose total price adds to a specific number (eg. $18
 *IMPT:* OGLs must make sure freshies wait outside at the grass patch and not block the staircase/entrance of COOP. Freshies are not to shout in COOP.
 """
 location = "Science COOP"
-letters = ['O', 'Z', 'B']
+letters = ['O', 'Z']
 password = "9mpX5t"
 station = Station(num, instruction, location, letters, password)
 stations[num] = station
@@ -130,6 +135,17 @@ letters = ['L', 'P']
 password = "10Xbs8"
 station = Station(num, instruction, location, letters, password)
 stations[num] = station
+
+num = 11
+instruction = """*Pinpad*
+Pull 25 freshies to fill a 5x5 grid (use the squares on the floor). The rest of the house will stand around the grid to help. Each freshie will be asked to stand or squat depending on a given initial configuration. The final goal is for the whole house to be standing/squatting. The house can only toggle freshies between standing and squatting. Each toggle will cause the four adjacent members to toggle their state as well.
+"""
+location = "area outside MPSH 5"
+letters = ['B']
+password = "11w55q"
+station = Station(num, instruction, location, letters, password)
+stations[num] = station
+
 
 
 

@@ -33,7 +33,7 @@ dispatcher.add_handler(start_conv_handler)
 play_conv_handler = ConversationHandler(
         entry_points=[CommandHandler('play', play)],
         states={
-            CONFIRMATION_REQUEST: [RegexHandler('^(1|2|3|4|5|6|7|8|9|10)$', get_instructions)],
+            CONFIRMATION_REQUEST: [RegexHandler('^(1|2|3|4|5|6|7|8|9|10|11)$', get_instructions)],
             },
         fallbacks=[CommandHandler('cancel', cancel)]
         )
