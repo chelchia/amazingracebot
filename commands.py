@@ -35,10 +35,10 @@ def start(bot, update):
 def registerHouse(bot, update):
     text = update.message.text
     chat_id = update.message.chat_id
-    if (chatDB.is_house_registered(text)):
-        update.message.reply_text(text = "What! This house has already been registered. Wanna check again? Type '/start' to choose another house", reply_markup=telegram.ReplyKeyboardRemove())
-        return ConversationHandler.END
-    elif (chatDB.is_chat_registered(chat_id)):
+    # if (chatDB.is_house_registered(text)):
+    #     update.message.reply_text(text = "What! This house has already been registered. Wanna check again? Type '/start' to choose another house", reply_markup=telegram.ReplyKeyboardRemove())
+    #     return ConversationHandler.END
+    if (chatDB.is_chat_registered(chat_id)):
         update.message.reply_text(text = "This chat has already been assigned a house! Type '/remove' to remove this chat's house, then '/start' to register a house.", reply_markup=telegram.ReplyKeyboardRemove())
         return ConversationHandler.END
     else:
